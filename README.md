@@ -38,18 +38,29 @@ The main benefits of this seem to be:
 - Every output can just be a 2-of-2 multi-sig (which could be a single key with MuSig or OP_CHECKMULTISIG with ECDSA etc). This makes the transactions a little smaller even when using 2-of-2 with ECDSA on balance (I think). The space saving comes from avoiding explicit revocation keys in the commitment transaction outputs.
 - The design works today and easily transitions into a post-taproot world although there is still a bit to explore there [5].
 
-## Commitment transaction outputs
 
-The way the fund transaction is constructed and negotiated remains unchanged.
+## Notation
+
+I describe the protocol with respect to two parties Alice and Bob.
+2-of-2(Xa,Xb) refers to a multi-signature output that supports adaptor signatures and requires the owners of Xa (Alice) and Xb (Bob) to authorise it (e.g. `OP_CHECKMULTISIG` with ECDSA [6], or MuSig with Schnorr etc [7]).
+
+## The Fund transaction
+
+The structure of channel funding does not change from the current BOLT spec.
+The Fund transaction spends from the funding party's (or funding _parties_) outputs to an output of 2-of-2(Fa,Fb) where Fa and Fb are public keys owned by Alice and Bob respectively. 
+These keys are generated and exchanged once per channel.
+
+## Commitment transactions
+
+A commitment transaction spends from the 2-of-2 on the Fund transaction.
 For each commitment transaction parties exchange two curve points each:
 
 - A _publication_ point (denoted P) whose secret is revealed if that party broadcasts the commitment transaction.
 - A _revocation_ point (denoted R) whose secret is explicitly revealed to the other party when revoking this commitment transaction.
 
-I'll use the notation (Pa, Ra) and (Pb, Rb) to refer to the publication and revocation points of Alice and Bob respectively and 2-of-2(X,Y) to refer to a multi-signature output that supports adaptor signatures and requires the owners of X and Y to authorise it (e.g. `OP_CHECKMULTISIG` with ECDSA [6], or MuSig with Schnorr etc [7]).
-
+Let (Pa, Ra) and (Pb, Rb) be the publication and revocation points of Alice and Bob respectively.
 The scriptPubkey of all outputs on a commitment transaction is 2-of-2(Pa + Ra, Pb + Rb). 
-For a slight increase in fungibility you can imagine that we pseudorandomly randomize each output so that they don't all look identical to blockchain observers.
+To make it slightly harder to distinguish these outputs from other uses of 2-of-2 you can imagine that we pseudorandomly randomize each output so that they are not identical.
 
 When signing a commitment transaction, the parties instead exchange adaptor signatures such that the party who publishes the commitment transaction must reveal their publication secret.
 This means that if a party broadcasts a commitment transaction for which they have already revealed their revocation secret the other party will know both secrets and therefore both secret keys in 2-of-2(Pa + Ra, Pb + Rb).
