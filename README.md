@@ -61,7 +61,7 @@ Both parties seeing the other's commitment transaction over the Bitcoin network 
 ## Balance outputs
 
 For a balance output going to Alice the output is 2-of-2(Pb, Ra) and the converse for Bob's balance output i.e. 2-of-2(Pa,Rb).
-Each balance output has a pre-signed relative time-locked claim transaction spending it to an address owned by Alice.
+Each balance output has a pre-signed relative time-locked claim transaction spending it to an address owned by the deserving party.
 
 ## PTLCs
 
