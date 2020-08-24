@@ -76,8 +76,8 @@ Each balance output has a pre-signed relative time-locked claim transaction spen
 
 ## PTLCs
 
-PTLCs are added directly to commitment transactions as outputs in the form described above.
-Each PTLC has two transactions spending from it: PTLC-success and PTLC-timeout.
+PTLC outputs are added directly to commitment transactions as in the form described above.
+Each PTLC has two pre-signed transactions spending from it: PTLC-success and PTLC-timeout.
 Broadcasting the PTLC-success transaction reveals the PTLC secret in the usual way using an adaptor signatures.
 The PTLC-timeout transaction has an absolute time-lock on it through the nlocktime transaction value.
 
