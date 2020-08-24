@@ -23,7 +23,7 @@ More in depth commentary by Towns can be found in [2] and they propose a solutio
 
 In short, the problem is that it creates a risk for the party that needs to fulfill an HTLC with the secret in time.
 The only known way of accounting for this risk is to increase the difference between the time-locks on each hop.
-There could be situations where this trade off makes sense but it seems like it undesirable for a general purpose payment channel network.
+There could be situations where this trade off makes sense but it seems undesirable for a general purpose payment channel network.
 
 # Proposal
 
