@@ -92,7 +92,7 @@ I find this slightly unappealing because it means using an output that is not ju
 
 Only the destination party needs to have the signature (or adaptor signature) on the PTLC-success or PTLC-timeout transactions.
 So if it's a PTLC offered by Alice to Bob then Bob will have an adaptor signature on PTLC-success and Alice will have a ordinary signature on the PTLC-timeout transaction.
-There is no theoretical security issue with both parties having the signatures it just unnecessary makes making writing state machines easier if Alice can rule out a PTLC-success transaction being broadcast unless she broadcasted it herself.
+There is no theoretical security issue with both parties having the signatures it just makes making writing state machines easier if Alice can rule out a PTLC-success transaction being broadcast unless she broadcasted it herself.
 
 # Scenarios
 
