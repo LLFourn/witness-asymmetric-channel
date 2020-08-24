@@ -3,23 +3,24 @@ _This is draft email to the lightning-dev mailing list. If all goes well maybe i
 # Background
 
 As presently specified, the two parties in a lightning channel are assigned different commitment transactions.
-This is logically necessary for the protocol to identify which party broadcasted the commitment transaction and potentially punish them if the other party provides provides proof it has been revoked (i.e. knows the revocation key).
+This _transaction asymmetry_ is logically necessary for the protocol to identify which party broadcasted the commitment transaction and potentially punish them if the other party provides provides proof it has been revoked (i.e. knows the revocation key).
 
 Wouldn't it be nice if we could identify the broadcasting party without assigning them different transactions?
-Riard first considered this problem in [8] and proposed that you could identify the party using _witness asymmetry_ i.e. both parties broadcast the same transaction but have different witnesses. 
-Unfortunately, the solution they propose is rather convoluted.
+Riard first considered this problem in [8] while trying to add punishment mechanism into eltoo[9] style channel updates.
+They proposed that you could identify the broadcasting party using _witness asymmetry_ i.e. both parties broadcast the same transaction but have different witnesses. 
+Unfortunately, the solution proposed is rather convoluted.
 
 More recently in [1], Aumayr et al. introduced a much more elegant witness asymmetric solution using adaptor signatures.
 Instead of being assigned different transactions, the parties are assigned different adaptor signatures as witnesses for the _same_ transaction.
 The adaptor signatures force the party broadcasting a commitment transaction to reveal a "publishing secret" to the other party.
 The honest party can then use this publishing secret along with knowledge of the usual revocation secret to punish the malicious party for broadcasting an old commitment transaction.
 
-In the paper this idea is combined with "punish-then-split" mechanism similar to the original eltoo[8] proposal and therefore it unfortunately inherits the issue with staggering time-locks.
+In the paper this idea is combined with "punish-then-split" mechanism similar to the original eltoo proposal and therefore it unfortunately inherits the issue with staggering time-locks.
 BOLT 3 [4] notes this problem as design motivation:
 
 > The reason for the separate transaction stage for HTLC outputs is so that HTLCs can timeout or be fulfilled even though they are within the to_self_delay delay. Otherwise, the required minimum timeout on HTLCs is lengthened by this delay, causing longer timeouts for HTLCs traversing the network.
 
-More in depth commentary by Towns can be found in [2] and they propose a solution to the eltoo proposal in [3].
+More in depth commentary by Towns can be found in [2] and they propose a solution for the eltoo proposal in [3].
 
 In short, the problem is that it creates a risk for the party that needs to fulfill an HTLC with the secret in time.
 The only known way of accounting for this risk is to increase the difference between the time-locks on each hop.
@@ -145,3 +146,4 @@ Thanks in advance for any ideas you have that could improve this scheme.
 [6]: https://joinmarket.me/blog/blog/schnorrless-scriptless-scripts/
 [7]: https://joinmarket.me/blog/blog/flipping-the-scriptless-script-on-schnorr/_ 
 [8]: https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-July/002064.html
+[9]: https://blockstream.com/eltoo.pdf
