@@ -63,7 +63,7 @@ The scriptPubkey of all outputs on a commitment transaction is 2-of-2(Pa + Ra, P
 To make it slightly harder to distinguish these outputs from other uses of 2-of-2 you can imagine that we pseudorandomly randomize each output so that they are not identical.
 
 When signing a commitment transaction, the parties instead exchange adaptor signatures such that the party who publishes the commitment transaction must reveal their publication secret.
-This means that if a party broadcasts a commitment transaction for which they have already revealed their revocation secret the other party will know both secrets and therefore both secret keys in 2-of-2(Pa + Ra, Pb + Rb).
+This means that if a malicious party broadcasts a commitment transaction for which they have already revealed their revocation secret the other party will know both secrets and therefore both secret keys in 2-of-2(Pa + Ra, Pb + Rb).
 They can use this to unilaterally spend from all the outputs on the commitment transaction to punish the malicious party.
 
 Note there is no problem with both parties broadcasting the same commitment transaction at the same time with their different signatures.
