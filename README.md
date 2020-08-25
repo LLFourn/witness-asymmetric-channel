@@ -1,11 +1,13 @@
 # Abstract
 
-This a proposal for a new channel symmetric channel construction that uses the key idea from a recent paper called "Generalized Bitcoin-Compatible Channels"[1] and tries to practically apply it to lightning.
+This a proposal for a new channel symmetric channel construction that uses the
+key idea from a recent paper called "Generalized Bitcoin-Compatible Channels"[1]
+and tries to practically apply it to lightning.
 
 # Background
 
 As presently specified the two parties in a lightning channel are assigned different commitment transactions.
-This _transaction asymmetry_ is logically necessary for the protocol to identify which party broadcasted a commitment transaction and potentially punish them if the other party provides provides proof it has been revoked (i.e. knows the revocation key).
+This _transaction asymmetry_ is logically necessary for the protocol to identify which party broadcasted a commitment transaction and potentially punish them if the other party provides proof it has been revoked (i.e. knows the revocation key).
 
 Wouldn't it be nice if we could identify the broadcasting party without assigning them different transactions?
 Riard first considered this problem in [8] while trying to add a punishment mechanism to eltoo[9] style channel updates.
@@ -34,7 +36,7 @@ There could be situations where this trade off makes sense but it seems undesira
 I propose a channel protocol which steals the main idea from Aumayr et al. while retaining the time-lock precedence of BOLT 3 transactions.
 That is, absolute time-locks are settled before relative time-locks to avoid having to account for relative time-locks when calculating absolute time-locks.
 
-The guiding principal is to keep commitment transactions symmetric but to use the asymmetric knowledge of the parties to simulate the way lightning works right now.
+The guiding principle is to keep commitment transactions symmetric but to use the asymmetric knowledge of the parties to simulate the way lightning works right now.
 The main benefits of this seem to be:
 
 - It is more elegant as there are half the number of possible transactions. I expect this will follow through to reduced implementation complexity and maybe make it easier to explain as well.
@@ -96,8 +98,8 @@ Alternatively, the PTLC-success/timeout can be constructed like HTLC-success/tim
 I find this slightly unappealing because it means using an output that is not just a 2-of-2.
 
 Only the destination party needs to have the signature (or adaptor signature) on the PTLC-success or PTLC-timeout transactions.
-So if it's a PTLC offered by Alice to Bob then Bob will have an adaptor signature on PTLC-success and Alice will have a ordinary signature on the PTLC-timeout transaction.
-There is no theoretical security issue with both parties having the signatures it just makes making writing state machines easier if Alice can rule out a PTLC-success transaction being broadcast unless she broadcasted it herself.
+So if it's a PTLC offered by Alice to Bob then Bob will have an adaptor signature on PTLC-success and Alice will have an ordinary signature on the PTLC-timeout transaction.
+There is no theoretical security issue with both parties having the signatures it just makes writing state machines easier if Alice can rule out a PTLC-success transaction being broadcast unless she broadcasted it herself.
 
 # Scenarios
 
