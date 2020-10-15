@@ -78,7 +78,7 @@ This has an interesting implication: just by seeing the revoked signature attach
 
 To fully emulate the coin access structure of current lightning channels for any given state (e.g. if the other party broadcasted the commitment transaction you can take your balance right away) we must extend our notion of revocable signatures.
 Each revocable signature needs to be able to be *anticipated*. 
-Note that typical Schnorr signatures have this property: given a message `m` a public key `X` and a nonce `R` we can *anticipate* the signature as `S = R - H(R || X || m) * X`.
+Note that typical Schnorr signatures have this property: given a message `m` a public key `X` and a nonce `R` we can *anticipate* the signature as `S = R + H(R || X || m) * X`.
 This allows us to use the revelation of `s` to reflect a state in the protocol.
 This anticipated signature essentially replaces the role of the "publishing secret" from [[1]] since we use the revelation of the underlying signature to identify which party published the commitment transaction.
 The main difference is that anticipated signatures do not require storing a "publishing point" per commitment transaction to enact the punishment.
@@ -119,7 +119,7 @@ The multi-signature scheme needs to be revocable as described above.
 In practice `2-of-2(A,B)` should be interpret as some deterministic randomization of `A,B` so that all `2-of-2(A,B)` outputs do not look the same however we omit this for clarity.
 
 We refer to the anticipated signature of Alice and Bob's revocable signature on the commitment transaction as `publicationA_i` and `publicationB_i` respectively.
-These are revealed when Alice or Bob broadcasts their revocable (bit not necessarily revoked) signature.
+These are revealed when Alice or Bob broadcasts their revocable (but not necessarily revoked) signature.
 
 ## The Fund transaction
 
