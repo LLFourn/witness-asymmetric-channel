@@ -39,7 +39,8 @@ But to avoid dealing with this question we provide an alternate transaction stru
 
 ### Storage complexity
 
-For each commitment transaction each party must communicate a publication point, whose secret is revealed if they publish the commitment transaction.
+In [1], each party must communicate a publication point for each commitment transaction.
+The secret key for the publication point is revealed if they publish the commitment transaction.
 However, in order to extract the secret this point must be recalled upon seeing the transaction witness.
 Clearly this leads to O(n) storage complexity where n is the number of commitment transactions.
 
