@@ -173,6 +173,27 @@ Note the following scenarios:
 
 The implications of switching the direction of the PTLC are straightforward.
 
+# Scorched Earth Punishments
+
+In the above structure there is no reason why the static keys `A` and `B` need to be chosen per channel.
+Instead they can be the main node static keys which define Alice and Bob's identity on the network.
+Losing this secret key is a "scorched earth" punishment: it applies to all channels with all peers and means the peer can never re-use their identity again!
+
+The weakness of only punishing the funds in a single channel is that you have to ensure that there is enough in the channel to create a reasonable deterrent.
+This necessarily means freezing some portion of the funds. From BOLT 2:
+
+> The *channel reserve* is specified by the peer's `channel_reserve_satoshis`: 1% of the channel total is suggested. Each side of a channel maintains this reserve so it always has something to lose if it were to try to broadcast an old, revoked commitment transaction. Initially, this reserve may not be met, as only one side has funds; but the protocol ensures that there is always progress toward meeting this reserve, and once met, it is maintained.* 
+
+With this scheme there would be no need for `channel_reserve_satoshis` in the majority of cases.
+Honest parties would simply have to ensure that their peers have a lot to lose across the whole network.
+If misbehavior occurs -- even if it is only observed long after the funds have been stolen -- then the wronged peer will be able to extract the peer's secret key from the on-chain transactions and publish it publicly. 
+Any other peers with channels with the malicious peer could then clean sweep all the channel funds.
+Small users could rest easy knowing that if their Bitcoin were stolen through a revoked transactions while they were offline, whenever they came back online they would be able to publish their peer's secret key.
+As long as the cheating peer is a somewhat well-established node on the network, the loss of their identity and other channel funds should overwhelm whatever gain they could get from the small channel. 
+To an extent this obviates the need for 3rd party *watchtowers* as long as you are only making channels with well established nodes with a lot to lose. 
+
+It's important to note that scorched earth punishments do not require the precise channel structure above but simply that revocable signatures are used as the revocation mechanism and the node's static key is used appropriately in transaction outputs.
+It could even be applied to transaction asymmetric designs (i.e. lightning as it is today).
 
 [original proposal]: ./original.md
 [1]: https://eprint.iacr.org/2020/476.pdf 
