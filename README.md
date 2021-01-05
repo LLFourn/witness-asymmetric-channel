@@ -74,8 +74,10 @@ If the revoked commitment transaction is confirmed then all of its outputs may b
 In our witness asymmetric design a party will revoke their *signature* on a transaction rather than the transaction itself.
 Revoking a signature happens in the same way as a transaction: you reveal a revocation secret.
 Our goal is that when you broadcast a revoked signature **you reveal your static private key**.
-Knowledge of your static private key is enough to claim all the funds from the funding output all commitment transaction outputs and any PTLC-success/timeout outputs.
+Knowledge of your static private key is enough to claim all the funds from the funding output, all commitment transaction outputs and any PTLC-success/timeout outputs.
 This has an interesting implication: just by seeing the revoked signature attached to an old commitment transaction in your mempool, you can now claim the funding output immediately without waiting for the revoked transaction to confirm.
+
+### Anticipation of Revocable Sigantures
 
 To fully emulate the coin access structure of current lightning channels for any given state (e.g. if the other party broadcasted the commitment transaction you can take your balance right away) we must extend our notion of revocable signatures.
 Each revocable signature needs to be able to be *anticipated*. 
@@ -106,6 +108,8 @@ Imagine that Alice receives `s = ra + rb + H(A + B || Ra + Rb || m)` as the join
 Clearly Alice can verifiably revoke the signature by revealing `ra` to Bob since if Bob were to see the signature afterwards Bob could extract `a` as
 
 `a = s - (ra - rb)/H(Ra + Rb || A + B || m) - b`
+
+The anticipation point for a aggregated 2-of-2 is simply `s*G = Ra + Rb + H(A + B || Ra + Rb || m) * (A + B)`.
 
 # Proposal
 
