@@ -1,3 +1,8 @@
+**Author's note 05-04-21**: I no longer think the actual protocol presented below is practical.
+Although most of it could work (there are notes below showing what needs to be fixed) it doesn't provide a major improvement over the existing lightning design.
+The existing lightning design has an important advantage that you are able to set static keys for the balance outputs of each commitment transaction (so if Alice broadcasts her commitment transaction it goes straight to Bob's wallet).
+However, the idea of Revocable signatures and scorched earth punishments I do believe are applicable to lightning today and in the future and I hope to expand on these in the future.
+
 # Abstract
 
 This a proposal for a new channel symmetric channel construction that uses the
@@ -146,8 +151,11 @@ Each commitment transaction is signed by both parties so that each party has a s
 The two balance outputs assign some proportion of the funds exclusively to each party.
 Each one has a scriptPubkey of:
 
-- Alice: `2-of-2(A, publicationB_i) `
+- Alice: `2-of-2(A, publicationB_i)`
 - Bob: `2-of-2(publicationA_i, B)`
+
+
+**Author's note 05-04-21**: This doesn't work in the case of Schnorr aggregated 2-of-2 since the `publication` points are a function of the commitment transaction itself (and so can't be used in computing an output).
 
 Each Balance output has a relative time locked claim transaction spending it to an address owned by the deserving party.
 Note that if Alice publishes a valid state she reveals `publicationA_i` and Bob can take his funds immediately.
